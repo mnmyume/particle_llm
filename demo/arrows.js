@@ -1,25 +1,25 @@
-import Shader from "../source/shader.js";
-import Time from "../source/time.js";
-import Transform from "../source/transform.js";
-import Material from "../source/material.js";
-import Shape from "../source/shape.js";
-import Texture2D from "../source/texture2d.js";
-import Solver from "../source/solver.js";
-import SolverMaterial from "../source/solverMaterial.js";
-import SolverShape from "../source/solverShape.js";
+import Shader from "../source/source/shader.js";
+import Time from "../source/source/time.js";
+import Transform from "../source/source/transform.js";
+import Material from "../source/source/material.js";
+import Shape from "../source/source/shape.js";
+import Texture2D from "../source/source/texture2d.js";
+import Solver from "../source/source/solver.js";
+import SolverMaterial from "../source/source/solverMaterial.js";
+import SolverShape from "../source/source/solverShape.js";
 
-import {readAttrSchema} from "../source/shapeHelper.js";
-import {genAngVel, genLinVel, genQuadUV, genRectHaltonPos, genInitData} from "../source/generatorHelper.js";
-import {sqrtFloor} from "../source/mathHelper.js";
+import {readAttrSchema} from "../source/source/shapeHelper.js";
+import {genAngVel, genLinVel, genQuadUV, genRectHaltonPos, genInitData} from "../source/source/generatorHelper.js";
+import {sqrtFloor} from "../source/source/mathHelper.js";
 
-import quadVert from "../shaders/glsl/quad-vert.glsl";
-import quadFrag from "../shaders/glsl/quad-frag.glsl";
-import solverVert from "../shaders/glsl/solver-vert.glsl";
-import solverFrag from "../shaders/glsl/solver-frag.glsl";
-import arrowVert from "../shaders/glsl/arrow-vert.glsl";
-import arrowFrag from "../shaders/glsl/arrow-frag.glsl";
-import bkgVert from "../shaders/glsl/background-vert.glsl";
-import bkgFrag from "../shaders/glsl/background-frag.glsl";
+import quadVert from "../source/shaders/glsl/quad-vert.glsl";
+import quadFrag from "../source/shaders/glsl/quad-frag.glsl";
+import solverVert from "../source/shaders/glsl/solver-vert.glsl";
+import solverFrag from "../source/shaders/glsl/solver-frag.glsl";
+import arrowVert from "../source/shaders/glsl/arrow-vert.glsl";
+import arrowFrag from "../source/shaders/glsl/arrow-frag.glsl";
+import bkgVert from "../source/shaders/glsl/background-vert.glsl";
+import bkgFrag from "../source/shaders/glsl/background-frag.glsl";
 
 
 

@@ -1,14 +1,14 @@
-import Shader from "../source/shader.js";
-import Transform from "../source/transform.js";
-import Material from "../source/material.js";
-import Shape from "../source/shape.js";
-import Texture2D from "../source/texture2d.js";
+import Shader from "../source/source/shader.js";
+import Transform from "../source/source/transform.js";
+import Material from "../source/source/material.js";
+import Shape from "../source/source/shape.js";
+import Texture2D from "../source/source/texture2d.js";
 
-import { readAttrSchema } from "../source/shapeHelper.js";
-import { genQuadUV } from "../source/generatorHelper.js";
+import { readAttrSchema } from "../source/source/shapeHelper.js";
+import { genQuadUV } from "../source/source/generatorHelper.js";
 
-import quadVert from "../shaders/glsl/quad-vert.glsl"
-import quadFrag from "../shaders/glsl/quad-frag.glsl"
+import quadVert from "../source/shaders/glsl/quad-vert.glsl"
+import quadFrag from "../source/shaders/glsl/quad-frag.glsl"
 
 
 export function initQuad(gl, canvas, camera) {

@@ -1,25 +1,25 @@
-import Shader from "../source/shader.js";
-import Time from "../source/time.js";
-import Transform from "../source/transform.js";
-import Material from "../source/material.js";
-import Shape from "../source/shape.js";
-import Texture2D from "../source/texture2d.js";
-import Solver from "../source/solver.js";
-import SolverMaterial from "../source/solverMaterial.js";
-import SolverShape from "../source/solverShape.js";
+import Shader from "../source/source/shader.js";
+import Time from "../source/source/time.js";
+import Transform from "../source/source/transform.js";
+import Material from "../source/source/material.js";
+import Shape from "../source/source/shape.js";
+import Texture2D from "../source/source/texture2d.js";
+import Solver from "../source/source/solver.js";
+import SolverMaterial from "../source/source/solverMaterial.js";
+import SolverShape from "../source/source/solverShape.js";
 
-import {readAttrSchema} from "../source/shapeHelper.js";
-import {genAngVel, genLinVel, genQuadUV, genRectHaltonPos, genInitData} from "../source/generatorHelper.js";
-import {sqrtFloor} from "../source/mathHelper.js";
+import {readAttrSchema} from "../source/source/shapeHelper.js";
+import {genAngVel, genLinVel, genQuadUV, genRectHaltonPos, genInitData} from "../source/source/generatorHelper.js";
+import {sqrtFloor} from "../source/source/mathHelper.js";
 
-import quadVert from "../shaders/glsl/quad-vert.glsl";
-import quadFrag from "../shaders/glsl/quad-frag.glsl";
-import solverVert from "../shaders/glsl/solver-vert.glsl";
-import solverFrag from "../shaders/glsl/solver-frag.glsl";
-import snowVert from "../shaders/glsl/snow-vert.glsl";
-import snowFrag from "../shaders/glsl/snow-frag.glsl";
-import bkgVert from "../shaders/glsl/background-vert.glsl";
-import bkgFrag from "../shaders/glsl/background-frag.glsl";
+import quadVert from "../source/shaders/glsl/quad-vert.glsl";
+import quadFrag from "../source/shaders/glsl/quad-frag.glsl";
+import solverVert from "../source/shaders/glsl/solver-vert.glsl";
+import solverFrag from "../source/shaders/glsl/solver-frag.glsl";
+import snowVert from "../source/shaders/glsl/snow-vert.glsl";
+import snowFrag from "../source/shaders/glsl/snow-frag.glsl";
+import bkgVert from "../source/shaders/glsl/background-vert.glsl";
+import bkgFrag from "../source/shaders/glsl/background-frag.glsl";
 
 
 
@@ -29,19 +29,19 @@ export function initSnow(gl, canvas, camera) {
     const MAXGENSIZE = 2;
     const STRIDE = 13;
     const particleParams = {
-        count: 1000,
-        duration: 20,
-        lifeTime: 20,
-        minSize: 12,
-        maxSize: 20,
-        startLinVel:[0,0,0],
-        radius: 0.8,
-        blurRadius: 0.1,
-        pixelNum: 4,
-        color:[0.85,0.85,0.85],
-        alpha:0.8,
-        emitterSize: 32,
-        emitterHeight: 40
+        count: 1000,    // Total distinct particles to spawn over the entire 'duration'. EmissionRate = count / duration.
+        duration: 20,   // Emission duration in seconds. Emitter stops spawning after this time.
+        lifeTime: 20,   // Individual particle lifespan in seconds.
+        minSize: 12,    // Minimum particle scale (World Units) for random variation.
+        maxSize: 20,    // Maximum particle scale (World Units) for random variation.
+        startLinVel:[0,0,0],    // Initial linear velocity vector (vec3) applied at birth [x, y, z].
+        radius: 0.8,    // Normalized draw radius within the point sprite quad (0.0 to 1.0).
+        blurRadius: 0.1,    // SDF feathering amount for soft edges [0.0 = full gradient, 1.0 = hard edge].
+        color:[0.85,0.85,0.85], // RGB particle base color, normalized linear values [0.0 to 1.0].
+        pixelNum: 4,        //  Quantization steps for pixel-art effect. Lower value = fewer/larger "pixels".
+        alpha:0.8,  // Maximum opacity multiplier [0.0 to 1.0].
+        emitterSize: 32,    // Diameter/Width of the emission volume (World Units).
+        emitterHeight: 40   // Vertical height of the emission volume (World Units).
     }
     const MAXCOL = sqrtFloor(particleParams.count);
 
@@ -50,20 +50,20 @@ export function initSnow(gl, canvas, camera) {
     emitterTransform.translate(0, particleParams.emitterHeight, 0);
 
     const solverParams = {
-        gravitySwitcher: 1,
-        gravity: [0, -10, 0],
-        vortexSwitcher: 1,
-        vortexScalar: 1/1000,
-        noiseSwitcher: 1,
-        noiseScalar: [0.3, 0.3, 0.3],
-        dampSwitcher: 1,
-        dampScalar: 0.8,
-        turbulenceSwitcher: 0,
-        turbulenceNum: 4,
-        turbulenceAmp: 0.02,
-        turbulenceSpeed: 0,
-        turbulenceFreq: 2.0,
-        turbulenceExp: 1.4
+        gravitySwitcher: 1, // Boolean Integer (0 or 1). If 1, applies gravity vector to velocity.
+        gravity: [0, -10, 0],   // Constant acceleration vector [x, y, z] added to velocity each step.
+        vortexSwitcher: 1,  // Boolean Integer (0 or 1). If 1, adds curl noise/rotational force.
+        vortexScalar: 1/1000,   // Rotational strength multiplier. Higher values = faster spin around axis.
+        noiseSwitcher: 1,   // Boolean Integer (0 or 1). If 1, adds random directional noise.
+        noiseScalar: [0.3, 0.3, 0.3],   // Per-axis intensity of random noise [x, y, z].
+        dampSwitcher: 1,    // Boolean Integer (0 or 1). If 1, applies linear drag/friction.
+        dampScalar: 0.8,    // Velocity retention factor [0.0 to 1.0]. (Higher = thicker fluid).
+        turbulenceSwitcher: 0,  // Boolean Integer (0 or 1). If 1, applies complex fractal turbulence.
+        turbulenceNum: 4,   // Number of iterations (octaves) to increase detail.
+        turbulenceAmp: 0.02,    // The intensity or "height" of the displacement.
+        turbulenceSpeed: 0, // How fast the pattern animates over time.
+        turbulenceFreq: 2.0,    // The initial density or scale of the wave pattern.
+        turbulenceExp: 1.4  // Frequency multiplier per iteration (lacunarity).
     }
     window.solverParams = solverParams;
 
