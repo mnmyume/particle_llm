@@ -10,7 +10,7 @@ import asyncio
 
 
 def build_config_blueprint() -> chz.Blueprint[train.Config]:
-    model_name = "Qwen/Qwen3-8B"
+    model_name = "Qwen/Qwen3-32B"
     renderer_name = model_info.get_recommended_renderer_name(model_name)
     common_config = ChatDatasetBuilderCommonConfig(
         model_name_for_tokenizer=model_name,
@@ -27,12 +27,12 @@ def build_config_blueprint() -> chz.Blueprint[train.Config]:
 
     return chz.Blueprint(train.Config).apply(
         {
-            "log_path": "/tmp/tinker-examples/sl_basic_particle",
+            "log_path": "/tmp/tinker-examples/sl_basic_particle_32b",
             "model_name": model_name,
             "dataset_builder": dataset,
             "learning_rate": 2e-4,
             "lr_schedule": "linear",
-            "num_epochs": 24,
+            "num_epochs": 16,
             "eval_every": 8,
         }
     )

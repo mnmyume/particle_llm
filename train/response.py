@@ -66,7 +66,7 @@ responser = Responser(
 
 service_client = tinker.ServiceClient()
 
-sampling_path = "tinker://e57c56c3-14ef-5454-a2c9-34e692e55e8e:train:0/sampler_weights/final"
+sampling_path = "tinker://76f31240-d4d7-509d-afef-918b30838cc9:train:0/sampler_weights/final"
 
 sampling_client = service_client.create_sampling_client(
     model_path=sampling_path
